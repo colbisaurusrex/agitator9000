@@ -56,6 +56,30 @@ Agitator.prototype.fetchOfficial = function(){
   })
 }
 
+Agitator.prototype.errorHandler = function(code){
+  switch(code){
+    case 401:
+      console.log('You are unauthorized to make this request')
+      break;
+    case 403:
+      console.log('You are forbidden')
+      break;
+    case 404:
+      console.log('The item is not found')
+      break;
+    case 422:
+      console.log('The provided inputs are incorrect')
+      break;
+    case 429:
+      console.log('You have made too many requests recently. Come back later.')
+      break;
+    case 500:
+      console.log('Something went wrong with our server. Sorry!')
+    default:
+      console.log('There was some error with your request.')
+  }
+}
+
 
 
 
