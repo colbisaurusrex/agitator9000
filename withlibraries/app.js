@@ -29,4 +29,9 @@ Agitator.prototype.getUserInfo = function(){
   this.user.address = this.user.street + ' ' + this.user.city + ' ' + this.user.state + ' ' + this.user.zip;
 }
 
+Agitator.prototype.chooseOfficial = function(){
+  index = prompt.keyInSelect(this.officialTitles, 'Which official? ')
+  this.official = this.officialTitles[index]
+}
+
 
