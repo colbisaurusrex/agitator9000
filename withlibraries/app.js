@@ -17,3 +17,16 @@ const Agitator = function(){
   }
   this.officialTitles = Object.keys(this.titles);
 }
+
+Agitator.prototype.getUserInfo = function(){
+  this.user.fullName = prompt.question('What is your full name? ');
+  console.log('Hello, ' + this.user.fullName + '! Now we need your address. ');
+  this.user.street = prompt.question('What is your street address? ');
+  this.user.apt = prompt.question('Please enter apt #. If you don\'t have one, press enter ');
+  this.user.city = prompt.question('What city do you live in? ');
+  this.user.state = prompt.question('What is the abbreviation of your state? ');
+  this.user.zip = prompt.question('What is your zipcode? ');
+  this.user.address = this.user.street + ' ' + this.user.city + ' ' + this.user.state + ' ' + this.user.zip;
+}
+
+
