@@ -80,6 +80,11 @@ Agitator.prototype.errorHandler = function(code){
   }
 }
 
+Agitator.prototype.getUserMessage = function(){
+  console.log()
+  this.userMessage = prompt.question(`What would you like to say to your ${this.official}? `)
+}
+
 
 
 
