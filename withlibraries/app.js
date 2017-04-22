@@ -1,5 +1,6 @@
 const prompt = require('readline-sync')
 const axios = require('axios')
+const Lob = require('lob')('YOUR_LOB_API_KEY');
 
 const Agitator = function(){
   this.official = null;
@@ -83,6 +84,38 @@ Agitator.prototype.errorHandler = function(code){
 Agitator.prototype.getUserMessage = function(){
   console.log()
   this.userMessage = prompt.question(`What would you like to say to your ${this.official}? `)
+}
+
+Agitator.prototype.produceLetter = function(){
+    Lob.letters.create({
+      description: 'Civil Disobedience Letter',
+      to: {
+        name: this.fetchedOfficial.name,
+        address_line1: this.fetchedOfficial.street,
+        address_city: this.fetchedOfficial.city,
+        address_state: this.fetchedOfficial.state,
+        address_zip: this.fetchedOfficial.zip,
+        address_country: 'US',
+      },
+      from: {
+        name: this.user.fullName,
+        address_line1: this.user.street,
+        address_line2: this.user.apt,
+        address_city: this.user.city,
+        address_state: this.user.state,
+        address_zip: this.user.zip,
+        address_country: 'US',
+      },
+      file: 'tmpl_50a41c38638a0de',
+      data: {
+        message: this.userMessage,
+        recipient: this.fetchedOfficial.name,
+        sender: this.user.fullName
+      },
+      color: true
+    })
+  .then(res => console.log('You can find your letter here: ', res.url))
+  .catch(err => this.errorHandler(err.status_code))
 }
 
 
