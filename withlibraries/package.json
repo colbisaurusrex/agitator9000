@@ -1,0 +1,16 @@
+{
+  "name": "agitator9000",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ../withlibraries/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.16.1",
+    "lob": "^3.9.0",
+    "readline-sync": "^1.4.7"
+  }
+}
