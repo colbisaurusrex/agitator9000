@@ -1,5 +1,6 @@
 const stdin = process.stdin;
 const stdout = process.stdout;
+const { ask } = require('./helpers');
 
 const Agitator = function(){
   this.official = null;
@@ -49,4 +50,6 @@ Agitator.prototype.getUserInfo = function(){
     .catch(err => console.log(err))
 }
 
+const session = new Agitator();
+session.getUserInfo();
 
