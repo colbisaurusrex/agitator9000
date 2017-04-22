@@ -118,6 +118,30 @@ Agitator.prototype.produceLetter = function(){
   .catch(err => this.errorHandler(err.status_code))
 }
 
+Agitator.prototype.init = function(){
+  this.getUserInfo();
+  this.chooseOfficial();
+  this.fetchOfficial()
+  .then(()=>{
+    if(this.fetchStatus){
+      this.getUserMessage();
+    } else {
+      console.log('Try re-entering your information');
+      let newSession = new Agitator;
+      newSession.init();
+    }
+  })
+  .then(()=>{
+    if(this.userMessage) {
+        this.produceLetter();
+      }
+  })
+  .catch(err => console.log(err))
+}
+
+let session = new Agitator;
+session.init();
+
 
 
 
