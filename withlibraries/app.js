@@ -38,5 +38,24 @@ Agitator.prototype.civicUrlGenerator = function(levelsQuery, rolesQuery, address
   return `https://www.googleapis.com/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=YOUR_GOOGLE_API_KEY`;
 }
 
+Agitator.prototype.fetchOfficial = function(){
+  let url = this.civicUrlGenerator(this.titles[this.official].level, this.titles[this.official].role, this.user.address)
+  return axios.get(url)
+  .then((data)=>{
+    this.fetchedOfficial.name = data.data.officials[0].name;
+    this.fetchedOfficial.street = data.data.officials[0].address[0].line1;
+    this.fetchedOfficial.city = data.data.officials[0].address[0].city;
+    this.fetchedOfficial.state = data.data.officials[0].address[0].state;
+    this.fetchedOfficial.zip = data.data.officials[0].address[0].zip;
+    this.fetchStatus = true;
+    console.log(`Your ${this.official} is ${this.fetchedOfficial.name}`)
+  })
+  .catch((err) => {
+    this.errorHandler(err.status_code)
+    console.log(`This was the address you entered: ${this.user.address}`)
+  })
+}
+
+
 
 
