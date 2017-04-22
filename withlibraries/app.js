@@ -34,4 +34,9 @@ Agitator.prototype.chooseOfficial = function(){
   this.official = this.officialTitles[index]
 }
 
+Agitator.prototype.civicUrlGenerator = function(levelsQuery, rolesQuery, addressQuery){
+  return `https://www.googleapis.com/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=YOUR_GOOGLE_API_KEY`;
+}
+
+
 
