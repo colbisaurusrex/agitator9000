@@ -17,6 +17,15 @@ const ask = function(question){
   })
 }
 
+const produceList = function(list){
+  let choices = "";
+  list.forEach((item, index)=>{
+    choices += '[' + index + '] ' + item  + '\r\n'
+  })
+  return choices;
+}
+
 module.exports = {
-  ask
+  ask,
+  produceList
 }
