@@ -50,6 +50,10 @@ Agitator.prototype.getUserInfo = function(){
     .catch(err => console.log(err))
 }
 
+Agitator.prototype.civicUrlGenerator = function(levelsQuery, rolesQuery, addressQuery){
+  return `/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=YOUR_GOOGLE_API_KEY`;
+}
+
 const session = new Agitator();
 session.getUserInfo();
 
