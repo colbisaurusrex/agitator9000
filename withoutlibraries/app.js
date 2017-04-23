@@ -1,6 +1,6 @@
 const stdin = process.stdin;
 const stdout = process.stdout;
-const { ask } = require('./helpers');
+const { ask, produceList } = require('./helpers');
 
 const Agitator = function(){
   this.official = null;
@@ -47,13 +47,22 @@ Agitator.prototype.getUserInfo = function(){
       this.user.address = this.user.street + ' ' + this.user.city + ' ' + this.user.state + ' ' + this.user.zip;
       stdout.write(this.user.address)
     })
-    .catch(err => console.log(err))
+    .catch(err => stdout.write(err))
 }
 
 Agitator.prototype.civicUrlGenerator = function(levelsQuery, rolesQuery, addressQuery){
   return `/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=YOUR_GOOGLE_API_KEY`;
 }
 
+Agitator.prototype.chooseOfficial = function(){
+  ask('Please choose an official: ' + produceList(this.officialTitles))
+  .then((index) =>{
+    this.official = this.officialTitles[index];
+    console.log(this.official)
+  })
+  .catch(err => stdout.write(err))
+}
+
 const session = new Agitator();
-session.getUserInfo();
+session.chooseOfficial();
 
