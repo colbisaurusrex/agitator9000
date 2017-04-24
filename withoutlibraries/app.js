@@ -92,8 +92,29 @@ Agitator.prototype.getUserMessage = function(){
   })
 }
 
-
-
+Agitator.prototype.init = function(){
+  this.getUserInfo()
+  .then(() => {
+    return this.chooseOfficial();
+  })
+  .then(() => {
+    return this.fetchOfficial();
+  })
+  .then((data) =>{
+    this.fetchedOfficial.name = data.officials[0].name;
+    this.fetchedOfficial.street = data.officials[0].address[0].line1;
+    this.fetchedOfficial.city = data.officials[0].address[0].city;
+    this.fetchedOfficial.state = data.officials[0].address[0].state;
+    this.fetchedOfficial.zip = data.officials[0].address[0].zip;
+    this.fetchStatus = true;
+  })
+  .then(()=>{
+    return this.getUserMessage();
+  })
+  .then(()=>{
+    console.log(this.userMessage)
+  })
+}
 
 
 const session = new Agitator();
