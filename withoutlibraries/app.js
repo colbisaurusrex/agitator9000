@@ -1,5 +1,6 @@
 const stdin = process.stdin;
 const stdout = process.stdout;
+const https = require('https');
 const { ask, produceList } = require('./helpers');
 
 const Agitator = function(){
@@ -20,10 +21,10 @@ const Agitator = function(){
 }
 
 Agitator.prototype.getUserInfo = function(){
-  ask('What is your full name? ')
+  return ask('What is your full name? ')
     .then((answer)=>{
       this.user.fullName = answer
-      stdout.write('Hello, ' + this.user.fullName + '! Now we need your address. ');
+      stdout.write('Hello, ' + this.user.fullName + '! Now we need your address.');
       return ask('What is your street address? ');
     })
     .then((answer)=>{
@@ -44,25 +45,49 @@ Agitator.prototype.getUserInfo = function(){
     })
     .then((answer) =>{
       this.user.zip = answer
-      this.user.address = this.user.street + ' ' + this.user.city + ' ' + this.user.state + ' ' + this.user.zip;
-      stdout.write(this.user.address)
+      this.user.address = this.user.city + this.user.state + this.user.zip;
     })
     .catch(err => stdout.write(err))
 }
 
 Agitator.prototype.civicUrlGenerator = function(levelsQuery, rolesQuery, addressQuery){
-  return `/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=YOUR_GOOGLE_API_KEY`;
+  return `/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=AIzaSyBkx1kMqxMYYRu03iJKsetRWSmHWODC9Ac`;
 }
 
 Agitator.prototype.chooseOfficial = function(){
-  ask('Please choose an official: ' + produceList(this.officialTitles))
+ return ask('Please choose an official: ' + produceList(this.officialTitles))
   .then((index) =>{
     this.official = this.officialTitles[index];
-    console.log(this.official)
   })
   .catch(err => stdout.write(err))
 }
 
+Agitator.prototype.fetchOfficial = function(callback){
+    let url = this.civicUrlGenerator(this.titles[this.official].level, this.titles[this.official].role, this.user.address)
+    let body = "";
+    return new Promise(function(resolve, reject){
+      let request = https.get({
+        host: 'www.googleapis.com',
+        path: url,
+        },
+        function(response){
+          response.on('data', function(data){
+            body += data;
+          })
+          response.on('end', function(){
+            body = JSON.parse(body);
+            resolve(body);
+          })
+        })
+      request.on('error', function(err){
+          reject(err)
+        })
+    })
+}
+
+
+
+
 const session = new Agitator();
-session.chooseOfficial();
+session.init();
 
