@@ -51,7 +51,7 @@ Agitator.prototype.getUserInfo = function(){
 }
 
 Agitator.prototype.civicUrlGenerator = function(levelsQuery, rolesQuery, addressQuery){
-  return `/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=AIzaSyBkx1kMqxMYYRu03iJKsetRWSmHWODC9Ac`;
+  return `/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=YOUR_GOOGLE_API_KEY`;
 }
 
 Agitator.prototype.chooseOfficial = function(){
@@ -84,6 +84,14 @@ Agitator.prototype.fetchOfficial = function(callback){
         })
     })
 }
+
+Agitator.prototype.getUserMessage = function(){
+  return ask(`What would you like to say to your ${this.official}? `)
+  .then((answer)=>{
+    this.userMessage = answer;
+  })
+}
+
 
 
 
