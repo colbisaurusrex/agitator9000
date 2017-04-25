@@ -24,11 +24,11 @@ Agitator.prototype.getUserInfo = function(){
   return ask('What is your full name? ')
     .then((answer)=>{
       this.user.fullName = answer
-      stdout.write('Hello, ' + this.user.fullName + '! Now we need your address.');
+      stdout.write('Hello, ' + this.user.fullName + '! Now we need your address.' + '\r\n');
       return ask('What is your street address? ');
     })
     .then((answer)=>{
-      this.user.street = answer;
+      this.user.street = answer.replace(/\s/g, '');
       return ask('Please enter apt #. If you don\'t have one, press enter ');
     })
     .then((answer) => {
@@ -45,17 +45,17 @@ Agitator.prototype.getUserInfo = function(){
     })
     .then((answer) =>{
       this.user.zip = answer
-      this.user.address = this.user.city + this.user.state + this.user.zip;
+      this.user.address = this.user.street + this.user.city + this.user.state + this.user.zip;
     })
     .catch(err => stdout.write(err))
 }
 
 Agitator.prototype.civicUrlGenerator = function(levelsQuery, rolesQuery, addressQuery){
-  return `/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=YOUR_GOOGLE_API_KEY`;
+  return `/civicinfo/v2/representatives?levels=${levelsQuery}&roles=${rolesQuery}&address=${addressQuery}&key=AIzaSyBkx1kMqxMYYRu03iJKsetRWSmHWODC9Ac`;
 }
 
 Agitator.prototype.chooseOfficial = function(){
- return ask('Please choose an official: ' + produceList(this.officialTitles))
+ return ask('Please choose an official: '  + '\r\n' + produceList(this.officialTitles))
   .then((index) =>{
     this.official = this.officialTitles[index];
   })
@@ -92,6 +92,10 @@ Agitator.prototype.getUserMessage = function(){
   })
 }
 
+Agitator.prototype.produceLetter = function(){
+  //TODO: https post request to Lob create letter endpoint
+}
+
 Agitator.prototype.init = function(){
   this.getUserInfo()
   .then(() => {
@@ -107,12 +111,23 @@ Agitator.prototype.init = function(){
     this.fetchedOfficial.state = data.officials[0].address[0].state;
     this.fetchedOfficial.zip = data.officials[0].address[0].zip;
     this.fetchStatus = true;
+    stdout.write(`Your ${this.official} is ${this.fetchedOfficial.name}.` + '\r\n')
   })
   .then(()=>{
-    return this.getUserMessage();
+    if(this.fetchStatus){
+      this.getUserMessage();
+    } else {
+      stdout.write('Try re-entering your information');
+      let newSession = new Agitator;
+      newSession.init();
+    }
   })
   .then(()=>{
-    console.log(this.userMessage)
+    return this.produceLetter()
+    .catch(err => console.log(err))
+  })
+  .catch((err)=>{
+    stdout.write(err)
   })
 }
 
